@@ -41,28 +41,29 @@ public class UserController {
     //create
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
-        log.info("Initiating a controller call for createUser");
+        log.info("In UserController class createUser method start");
         UserDto userDto1 = userService.createUser(userDto);
-        log.info("Completed a controller call for createUser");
+        log.info("In UserController class createUser method ended");
         return new ResponseEntity<>(userDto1, HttpStatus.CREATED);
     }
 
     //update
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser( @PathVariable("userId")String userId,@Valid @RequestBody UserDto userDto) {
-        log.info("Initiating a controller call for updateUser");
+        log.info("In UserController class updateUser method start with id:",userId);
         UserDto updatedUserDto= userService.updateUser(userDto,userId);
-        log.info("Completed a controller call for updateUser");
+        log.info("In UserController class updateUser method ended with id:",userId);
+
         return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
     }
 
     //delete
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponseMessage>deleteUser(@PathVariable String userId) throws IOException {
-        log.info("Initiating a controller call for deleteUser");
+        log.info("In UserController class deleteUser method start with id:",userId);
         userService.deleteUser(userId);
         ApiResponseMessage message  = ApiResponseMessage.builder().message("User is deleted successfully !!").success(true).status(HttpStatus.OK).build();
-        log.info("Completed a controller call for deleteUser");
+        log.info("In UserController class deleteUser method ended with id:",userId);
         return new ResponseEntity<>(message,HttpStatus.OK);
 
     }
@@ -73,49 +74,49 @@ public class UserController {
                                                                  @RequestParam(value = "pageSize", defaultValue="10",required =false)int pageSize,
                                                                  @RequestParam( value = "sortBy", defaultValue="name",required =false)String sortBy,
                                                                  @RequestParam(value = "sortDir", defaultValue="asc",required =false)String sortDir){
-        log.info("Initiating a controller call for getAllUsers");
+        log.info("In UserController class getAllUsers method start");;
         PageableResponse<UserDto> allUser = userService.getAllUser(pageNumber,pageSize,sortBy,sortDir);
-        log.info("Completed a controller call for getAllUsers");
+        log.info("In UserController class getAllUsers method ended");
         return new ResponseEntity<>(allUser,HttpStatus.OK);
     }
 
     //get Single
    @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable String userId){
-       log.info("Initiating a controller call for getUser");
+       log.info("In UserController class getUser method start with id:",userId);
        UserDto userById = userService.getUserById(userId);
-       log.info("Completed a controller call for getUser");
+       log.info("In UserController class getUser method ended with id:",userId);
        return new ResponseEntity<>(userById,HttpStatus.OK);
     }
 
     //get by email
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email){
-        log.info("Initiating a controller call for getUserByEmail");
+        log.info("In UserController class getUserByEmail method start with :",email);
         UserDto userByEmail = userService.getUserByEmail(email);
-        log.info("Completed a controller call for getUserByEmail");
+        log.info("In UserController class getUserByEmail method ended with :",email);
         return new ResponseEntity<>(userByEmail,HttpStatus.OK);
     }
 
     //Search user
     @GetMapping("/search/{keywords}")
     public ResponseEntity<List<UserDto>> serchUser(@PathVariable String keywords){
-        log.info("Initiating a controller call for serchUser");
+        log.info("In UserController class serchUser method start with:",keywords);
         List<UserDto> userDtos = userService.serchUser(keywords);
-        log.info("Completed a controller call for serchUser");
+        log.info("In UserController class serchUser method ended with:",keywords);
         return new ResponseEntity<>(userDtos,HttpStatus.OK);
     }
 
     //upload user Image
     @PostMapping("/image/{userId}")
     public ResponseEntity<ImageResponce> uploadUserImage(@RequestParam("userImage") MultipartFile image, @PathVariable String userId) throws IOException {
-
+        log.info("In UserController class uploadUserImage method start with id:",userId);
         String imageName = fileService.uploadFile(image, imageUploadPath);
         UserDto user = userService  .getUserById(userId);
         user.setImageName(imageName);
         UserDto userDto = userService.updateUser(user, userId);
-
         ImageResponce imageResponce = ImageResponce.builder().imageName(imageName).success(true).status(HttpStatus.CREATED).build();
+        log.info("In UserController class uploadUserImage method ended with id:",userId);
         return new ResponseEntity<>(imageResponce,HttpStatus.CREATED);
     }
 
@@ -124,12 +125,13 @@ public class UserController {
     //serve user image
     @GetMapping("/image/{userId}")
     public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
+        log.info("In UserController class serveUserImage method start with id:",userId);
         UserDto user = userService.getUserById(userId);
-        log.info("User image name: {}", user.getImageName());
         InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
-
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource, response.getOutputStream());
+        log.info("In UserController class serveUserImage method ended with id:",userId);
+
     }
 
 }
