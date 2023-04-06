@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class UserController {
 
     //delete
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ApiResponseMessage>deleteUser(@PathVariable String userId){
+    public ResponseEntity<ApiResponseMessage>deleteUser(@PathVariable String userId) throws IOException {
         log.info("Initiating a controller call for deleteUser");
         userService.deleteUser(userId);
         ApiResponseMessage message  = ApiResponseMessage.builder().message("User is deleted successfully !!").success(true).status(HttpStatus.OK).build();
@@ -122,7 +123,7 @@ public class UserController {
 
     //serve user image
     @GetMapping("/image/{userId}")
-    public void serveUserImage(@PathVariable String userId, HttpServlet Response response) throws FileNotFoundException {
+    public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
         UserDto user = userService.getUserById(userId);
         log.info("User image name: {}", user.getImageName());
         InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
