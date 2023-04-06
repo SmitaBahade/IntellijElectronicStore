@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
-        log.info("Initiating the dao call for update the user data with userId{}:",userId);
+        log.info("Initiating the dao call for update the user data with id{}:",userId);
         User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found with given id"));
         user.setName(userDto.getName());
         user.setAbout(userDto.getAbout());
@@ -66,13 +66,13 @@ public class UserServiceImpl implements UserService {
         //save data
         User updatedUser = userRepository.save(user);
         UserDto updatedDto = entityToDto(updatedUser);
-        log.info("Complete the dao call for update the user data with userId{}:",userId);
+        log.info("Complete the dao call for update the user data with id{}:",userId);
         return updatedDto;
     }
 
     @Override
     public void deleteUser(String userId)  {
-        log.info("Initiating the dao call for delete the user data with userId{}:",userId);
+        log.info("Initiating the dao call for delete the user data with id{}:",userId);
         User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found with given id"));
        //delete user profile image
         //images/user/abc.png
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
         // delete user
         userRepository.delete(user);
-        log.info("Complete the dao call for delete the user data with userId{}:",userId);
+        log.info("Complete the dao call for delete the user data with id{}:",userId);
 
     }
 
@@ -110,9 +110,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(String userId) {
-        log.info("Initiating the dao call to get user from data with userId{}:",userId);
+        log.info("Initiating the dao call to get user from data with id{}:",userId);
         User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found with given id"));
-        log.info("Complete the dao call to get user from data with userId{}:",userId);
+        log.info("Complete the dao call to get user from data with id{}:",userId);
         return entityToDto(user);
     }
 
