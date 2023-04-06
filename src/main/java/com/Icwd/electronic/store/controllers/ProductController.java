@@ -4,11 +4,12 @@ import com.Icwd.electronic.store.dtos.ApiResponseMessage;
 import com.Icwd.electronic.store.dtos.PageableResponse;
 import com.Icwd.electronic.store.dtos.ProductDto;
 import com.Icwd.electronic.store.services.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@Slf4j
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -19,29 +20,37 @@ public class ProductController {
     //create
     @PostMapping
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+        log.info("In ProductController class createProduct method start");
         ProductDto createProduct = productService.create(productDto);
+        log.info("In ProductController class createProduct method ended");
         return new ResponseEntity<>(createProduct, HttpStatus.CREATED);
     }
 
     // update
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable String productId, @RequestBody ProductDto productDto) {
+        log.info("In ProductController class updateProduct method start with id:",productId);
         ProductDto updatedProduct = productService.update(productDto, productId);
+        log.info("In ProductController class updateProduct method ended with id:",productId);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     //delete
     @DeleteMapping("/{productId}")
     public ResponseEntity<ApiResponseMessage> deleteProduct(@PathVariable String productId, @RequestBody ProductDto productDto) {
+        log.info("In ProductController class deleteProduct method start with id:",productId);
         productService.delete(productId);
         ApiResponseMessage responseMessage = ApiResponseMessage.builder().message("Product i deleted successfully !!").status(HttpStatus.OK).success(true).build();
+        log.info("In ProductController class deleteProduct method ended with id:",productId);
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
     //get single
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable String productId) {
+        log.info("In ProductController class getProduct method start with id:",productId);
         ProductDto productDto = productService.get(productId);
+        log.info("In ProductController class getProduct method ended with id:",productId);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
 
@@ -51,7 +60,9 @@ public class ProductController {
                                                                @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
                                                                @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
                                                                @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+        log.info("In ProductController class getAll method start");
         PageableResponse<ProductDto> pageableResponse = productService.getAll(pageNumber, pageSize, sortBy, sortDir);
+        log.info("In ProductController class getAll method ended");
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
 
@@ -62,7 +73,9 @@ public class ProductController {
                                                                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
                                                                    @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
                                                                    @RequestParam(value = "sortDir", defaultValue = "asc", required = false)String sortDir) {
+        log.info("In ProductController class getAllLive method start");
         PageableResponse<ProductDto> productServiceAllLive = productService.getAllLive(pageNumber, pageSize, sortBy, sortDir);
+        log.info("In ProductController class getAllLive method ended");
         return new ResponseEntity<>(productServiceAllLive,HttpStatus.OK);
     }
 
@@ -73,7 +86,9 @@ public class ProductController {
                                                                       @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
                                                                       @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
                                                                       @RequestParam(value = "sortDir", defaultValue = "asc", required = false)String sortDir){
+        log.info("In ProductController class searchProduct method start with :",query);
         PageableResponse<ProductDto> pageableResponse = productService.searchByTitle(query, pageNumber, pageSize, sortBy, sortDir);
+        log.info("In ProductController class searchProduct method ended with :",query);
         return new ResponseEntity<>(pageableResponse,HttpStatus.OK);
     }
 }
