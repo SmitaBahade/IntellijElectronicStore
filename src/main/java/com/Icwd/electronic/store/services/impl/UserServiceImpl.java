@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private String imagePath;
     @Override
     public UserDto createUser(UserDto userDto) {
+        log.info("Initiating the dao call for create the user data ");
         //generate unique Id
         String userId = UUID.randomUUID().toString();
         userDto.setUserId(userId);
@@ -48,13 +49,13 @@ public class UserServiceImpl implements UserService {
 
         //entity -> dto
         UserDto newDto = entityToDto(savedUser);
+        log.info("Complete the dao call for create the user data :");
         return newDto;
     }
 
-
-
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
+        log.info("Initiating the dao call for update the user data with userId{}:",userId);
         User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found with given id"));
         user.setName(userDto.getName());
         user.setAbout(userDto.getAbout());
@@ -65,11 +66,13 @@ public class UserServiceImpl implements UserService {
         //save data
         User updatedUser = userRepository.save(user);
         UserDto updatedDto = entityToDto(updatedUser);
+        log.info("Complete the dao call for update the user data with userId{}:",userId);
         return updatedDto;
     }
 
     @Override
     public void deleteUser(String userId)  {
+        log.info("Initiating the dao call for delete the user data with userId{}:",userId);
         User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found with given id"));
        //delete user profile image
         //images/user/abc.png
@@ -87,10 +90,13 @@ public class UserServiceImpl implements UserService {
 
         // delete user
         userRepository.delete(user);
+        log.info("Complete the dao call for delete the user data with userId{}:",userId);
+
     }
 
     @Override
     public PageableResponse<UserDto> getAllUser(int pageNumber, int pageSize, String sortBy, String sortDir) {
+        log.info("Initiating the dao call to get all user from data ");
 
         Sort sort = (sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
         //page number default start with 0
@@ -98,26 +104,32 @@ public class UserServiceImpl implements UserService {
        Page<User> page = userRepository.findAll(pageable);
 
         PageableResponse<UserDto> response = Helper.getPageableResponse(page, UserDto.class);
+        log.info("Complete the dao call to get all user from data");
         return response;
     }
 
     @Override
     public UserDto getUserById(String userId) {
+        log.info("Initiating the dao call to get user from data with userId{}:",userId);
         User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found with given id"));
-
+        log.info("Complete the dao call to get user from data with userId{}:",userId);
         return entityToDto(user);
     }
 
     @Override
     public UserDto getUserByEmail(String email) {
+        log.info("Initiating the dao call to get user from data with email{}:",email);
       User user  = userRepository.findByEmail(email).orElseThrow(()->new ResourceNotFoundException(" User not found with given email id and password !!"));
+        log.info("Complete the dao call to get user from data with email{}:",email);
         return entityToDto(user);
     }
 
     @Override
     public List<UserDto> serchUser(String Keyword) {
+        log.info("Initiating the dao call to search user from data with Keyword{}:",Keyword);
        List<User> users = userRepository.findByNameContaining(Keyword);
         List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
+        log.info("Complete the dao call  to search user from data with Keyword{}:",Keyword);
         return dtoList;
     }
 
