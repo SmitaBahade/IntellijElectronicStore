@@ -23,6 +23,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 @Slf4j
@@ -86,8 +87,6 @@ public class UserServiceImpl implements UserService {
         }catch (IOException e){
             e.printStackTrace();
         }
-
-
         // delete user
         userRepository.delete(user);
         log.info("Complete the dao call for delete the user data with id{}:",userId);
@@ -132,6 +131,10 @@ public class UserServiceImpl implements UserService {
         log.info("Complete the dao call  to search user from data with Keyword{}:",Keyword);
         return dtoList;
     }
+
+    @Override
+    public Optional<User> findUserByEmailOptional(String email) {
+        return userRepository.findByEmail(email);}
 
     private UserDto entityToDto(User savedUser) {
 //        UserDto userDto = UserDto.builder()

@@ -2,9 +2,11 @@ package com.Icwd.electronic.store.services;
 
 import com.Icwd.electronic.store.dtos.PageableResponse;
 import com.Icwd.electronic.store.dtos.UserDto;
+import com.Icwd.electronic.store.entities.User;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -30,4 +32,7 @@ public interface UserService {
 
     //serch user
     List<UserDto> serchUser(String Keyword);
+
+    //other user specific features
+    Optional<User> findUserByEmailOptional(String email);
 }
