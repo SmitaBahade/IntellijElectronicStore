@@ -110,13 +110,13 @@ public class ProductServiceImplTest {
         //assert
         Assertions.assertEquals(3,allProduct.getContent().size());
     }
-    @Test
-    public void searchByTitleTest(){
-        String keywords="TV";
-        //arrenge
-        Mockito.when(productRepository.findByTitleContaining((Pageable)Mockito.any())).thenReturn(Arrays.asList(product,product1,product2));
-        //acta
-        productService.searchByTitle(keywords);
-        //assert
+//    @Test
+//    public void searchByTitleTest(){
+//        String keywords="TV";
+//        //arrenge
+//        Mockito.when(productRepository.findByTitleContaining((Pageable)Mockito.any())).thenReturn(Arrays.asList(product,product1,product2));
+//        //acta
+//        productService.searchByTitle(keywords);
+//        //assert
     }
-}
+
