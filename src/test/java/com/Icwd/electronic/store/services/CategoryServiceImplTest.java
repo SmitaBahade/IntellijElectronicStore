@@ -69,7 +69,7 @@ public class CategoryServiceImplTest {
         Assertions.assertEquals("Offer",category1.getTitle());
     }
     @Test
-    public void update(){
+    public void updateTest(){
         String categoryId="uyrghgfi";
         //arrenge
         Mockito.when(categoryRepository.save(Mockito.any())).thenReturn(category);
@@ -92,7 +92,7 @@ public class CategoryServiceImplTest {
         Mockito.verify(categoryRepository,Mockito.times(1)).delete(category);
     }
     @Test
-    public void getAll(){
+    public void getAllTest(){
         //arrenge
         List<Category> categoryList = Arrays.asList(category, category1, category2);
         Page page = new PageImpl(categoryList);
