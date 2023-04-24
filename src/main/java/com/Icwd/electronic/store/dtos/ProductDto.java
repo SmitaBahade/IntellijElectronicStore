@@ -1,5 +1,6 @@
 package com.Icwd.electronic.store.dtos;
 
+import com.Icwd.electronic.store.entities.Category;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -23,4 +24,5 @@ public class ProductDto {
     private boolean live;
     private boolean stock;
     private String productImageName;
+    private Category category;
 }
