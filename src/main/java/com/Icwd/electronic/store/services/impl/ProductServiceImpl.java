@@ -16,7 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -30,6 +32,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto create(ProductDto productDto) {
         log.info("Initiating the dao call for create the product data ");
         Product product = mapper.map(productDto, Product.class);
+        //product id
+        String productId = UUID.randomUUID().toString();
+        product.setProductId(productId);
+        //added
+        product.setAddedDate(new Date());
         Product saveProduct = productRepository.save(product);
         log.info("Complete the dao call for create the product data :");
         return mapper.map(saveProduct,ProductDto.class);
@@ -47,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
         product.setQuantity(productDto.getQuantity());
         product.setLive(productDto.isLive());
         product.setStock(productDto.isStock());
+        product.setProductImageName(productDto.getProductImageName());
 
         //save the entity
         Product updatedProduct = productRepository.save(product);
@@ -98,5 +106,10 @@ public class ProductServiceImpl implements ProductService {
             Page<Product> page = productRepository.findByTitleContaining(subTitle,pageable);
              log.info("Complete the dao call to get product by searchByTitle from data");
             return Helper.getPageableResponse(page,ProductDto.class);
+    }
+
+    @Override
+    public ProductDto createWithCategory(ProductDto productDto, String categoryId) {
+        return null;
     }
 }
