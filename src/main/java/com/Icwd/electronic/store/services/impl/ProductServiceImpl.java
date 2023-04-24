@@ -2,9 +2,11 @@ package com.Icwd.electronic.store.services.impl;
 
 import com.Icwd.electronic.store.dtos.PageableResponse;
 import com.Icwd.electronic.store.dtos.ProductDto;
+import com.Icwd.electronic.store.entities.Category;
 import com.Icwd.electronic.store.entities.Product;
 import com.Icwd.electronic.store.exceptions.ResourceNotFoundException;
 import com.Icwd.electronic.store.helper.Helper;
+import com.Icwd.electronic.store.repositories.CategoryRepository;
 import com.Icwd.electronic.store.repositories.ProductRepository;
 import com.Icwd.electronic.store.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,8 @@ import java.util.UUID;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
     @Autowired
     private ModelMapper mapper;
 
@@ -110,6 +114,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto createWithCategory(ProductDto productDto, String categoryId) {
-        return null;
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found..!!"));
+        Product product = mapper.map(productDto, Product.class);
+        //product id
+        String productId = UUID.randomUUID().toString();
+        product.setProductId(productId);
+        //added
+        product.setAddedDate(new Date());
+        product.setCategory(category);
+        Product saveProduct = productRepository.save(product);
+        return mapper.map(saveProduct,ProductDto.class);
+
     }
 }
