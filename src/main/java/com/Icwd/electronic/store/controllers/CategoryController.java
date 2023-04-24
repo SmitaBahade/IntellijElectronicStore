@@ -3,7 +3,9 @@ package com.Icwd.electronic.store.controllers;
 import com.Icwd.electronic.store.dtos.ApiResponseMessage;
 import com.Icwd.electronic.store.dtos.CategoryDto;
 import com.Icwd.electronic.store.dtos.PageableResponse;
+import com.Icwd.electronic.store.dtos.ProductDto;
 import com.Icwd.electronic.store.services.CategoryService;
+import com.Icwd.electronic.store.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,8 @@ public class CategoryController {
     //create
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ProductService productService;
 
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto){
@@ -64,5 +68,15 @@ public class CategoryController {
             log.info("In CategoryController class getSingle method ended with id:",categoryId);
             return ResponseEntity.ok(categoryDto);
         }
+        //create product with catregory
+        @PostMapping("/{categoryId}/products")
+        public ResponseEntity<ProductDto> createProductWithCategory(@PathVariable("categoryId") String categoryId,
+                                                                    @RequestBody ProductDto dto)
+        {
+            ProductDto productWithCategory = productService.createWithCategory(dto, categoryId);
+        return  new ResponseEntity<>(productWithCategory,HttpStatus.CREATED);
+
+        }
+
     }
 
